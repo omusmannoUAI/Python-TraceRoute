@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_9a34ef332e78e100cf48bcd6caac2521 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js"></script>
+</head>
+<body>
+    
+    
+        <div style="position: fixed; top: 12px; left: 12px; z-index: 9999; background: rgba(17,24,39,0.92); color: white; padding: 12px 14px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); font-family: Arial, sans-serif; max-width: 260px;">
+            <div style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">Traceroute visual</div>
+            <div style="font-size: 12px; opacity: 0.9; margin-bottom: 6px;">www.google.com</div>
+            <div style="font-size: 11px; opacity: 0.85; line-height: 1.4;">La línea verde animada muestra la ruta observada y el panel derecho resume el camino mínimo calculado con Dijkstra sobre los saltos geolocalizados.</div>
+        </div>
+        
+    
+        <div style="position: fixed; top: 12px; right: 12px; z-index: 9999; width: 340px; max-height: calc(100vh - 24px); overflow: auto; background: rgba(15,23,42,0.94); color: white; padding: 14px 16px; border-radius: 16px; box-shadow: 0 10px 36px rgba(0,0,0,0.28); font-family: Segoe UI, Arial, sans-serif; backdrop-filter: blur(8px);">
+            <div style="font-size: 15px; font-weight: 800; margin-bottom: 4px;">Ruta Dijkstra</div>
+            <div style="font-size: 12px; line-height: 1.45; opacity: 0.9; margin-bottom: 10px;">El algoritmo toma los saltos geolocalizados como nodos y calcula el camino con menor costo acumulado entre el primer y el último salto visible.</div>
+            <div style="display:flex; gap: 10px; margin-bottom: 12px;">
+                <div style="flex:1; background: rgba(34,197,94,0.14); border: 1px solid rgba(34,197,94,0.35); border-radius: 12px; padding: 10px;">
+                    <div style="font-size: 11px; color: #a7f3d0; text-transform: uppercase; letter-spacing: 0.04em;">Saltos</div>
+                    <div style="font-size: 20px; font-weight: 800; margin-top: 2px;">4</div>
+                </div>
+                <div style="flex:1; background: rgba(14,165,233,0.12); border: 1px solid rgba(14,165,233,0.3); border-radius: 12px; padding: 10px;">
+                    <div style="font-size: 11px; color: #bae6fd; text-transform: uppercase; letter-spacing: 0.04em;">Costo</div>
+                    <div style="font-size: 20px; font-weight: 800; margin-top: 2px;">17891.1 km</div>
+                </div>
+            </div>
+            <div style="font-size: 12px; color: #cbd5e1; margin-bottom: 8px;">Destino: www.google.com</div>
+            <ol style="list-style:none; padding:0; margin:0;">
+            <li style="margin: 0 0 10px 0; padding: 10px 10px 10px 12px; border-left: 3px solid #22c55e; background: rgba(15,23,42,0.55); border-radius: 10px;">
+                <div style="display:flex; justify-content:space-between; gap:8px; align-items:center;">
+                    <strong style="font-size: 13px;">Paso 1 · TTL 1</strong>
+                    <span style="font-size: 12px; color: #cbd5e1;">Inicio</span>
+                </div>
+                <div style="font-size: 12px; margin-top: 4px; color: #e2e8f0;">172.2.0.1</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">Palm Coast, Florida, United States</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">RTT: 1.5 ms · Acumulado: 0.0 km</div>
+            </li>
+            
+            <li style="margin: 0 0 10px 0; padding: 10px 10px 10px 12px; border-left: 3px solid #22c55e; background: rgba(15,23,42,0.55); border-radius: 10px;">
+                <div style="display:flex; justify-content:space-between; gap:8px; align-items:center;">
+                    <strong style="font-size: 13px;">Paso 2 · TTL 2</strong>
+                    <span style="font-size: 12px; color: #cbd5e1;">7519.1 km</span>
+                </div>
+                <div style="font-size: 12px; margin-top: 4px; color: #e2e8f0;">190.111.232.253</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">Buenos Aires, Buenos Aires F.D., Argentina</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">RTT: 4.4 ms · Acumulado: 7519.1 km</div>
+            </li>
+            
+            <li style="margin: 0 0 10px 0; padding: 10px 10px 10px 12px; border-left: 3px solid #22c55e; background: rgba(15,23,42,0.55); border-radius: 10px;">
+                <div style="display:flex; justify-content:space-between; gap:8px; align-items:center;">
+                    <strong style="font-size: 13px;">Paso 3 · TTL 3</strong>
+                    <span style="font-size: 12px; color: #cbd5e1;">5.3 km</span>
+                </div>
+                <div style="font-size: 12px; margin-top: 4px; color: #e2e8f0;">190.111.201.162</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">Avellaneda, Buenos Aires, Argentina</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">RTT: 5.4 ms · Acumulado: 7524.4 km</div>
+            </li>
+            
+            <li style="margin: 0 0 10px 0; padding: 10px 10px 10px 12px; border-left: 3px solid #22c55e; background: rgba(15,23,42,0.55); border-radius: 10px;">
+                <div style="display:flex; justify-content:space-between; gap:8px; align-items:center;">
+                    <strong style="font-size: 13px;">Paso 4 · TTL 5</strong>
+                    <span style="font-size: 12px; color: #cbd5e1;">10366.7 km</span>
+                </div>
+                <div style="font-size: 12px; margin-top: 4px; color: #e2e8f0;">142.251.156.119</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">Mountain View, California, United States</div>
+                <div style="font-size: 12px; margin-top: 3px; color: #94a3b8;">RTT: 3.4 ms · Acumulado: 17891.1 km</div>
+            </li>
+            </ol>
+        </div>
+        
+    
+            <div class="folium-map" id="map_9a34ef332e78e100cf48bcd6caac2521" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_9a34ef332e78e100cf48bcd6caac2521 = L.map(
+                "map_9a34ef332e78e100cf48bcd6caac2521",
+                {
+                    center: [29.4843, -81.2042],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 3,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_3ebf680a19facf645ab71ef76c93787f = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_3ebf680a19facf645ab71ef76c93787f.addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            var poly_line_27063d491e1295983cfadf755c0cd104 = L.polyline(
+                [[29.4843, -81.2042], [-34.6132, -58.3772], [-34.6602, -58.3674], [37.4225, -122.085]],
+                {"bubblingMouseEvents": true, "color": "#64748b", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#64748b", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.35, "smoothFactor": 1.0, "stroke": true, "weight": 7}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            ant_path_edd41618d0a0b7fad8838a10ca824b23 = L.polyline.antPath(
+              [[29.4843, -81.2042], [-34.6132, -58.3772], [-34.6602, -58.3674], [37.4225, -122.085]],
+              {
+  "stroke": true,
+  "color": "#14b8a6",
+  "weight": 5,
+  "opacity": 0.9,
+  "lineCap": "round",
+  "lineJoin": "round",
+  "dashArray": [
+10,
+20,
+],
+  "dashOffset": null,
+  "fill": false,
+  "fillColor": "#14b8a6",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "bubblingMouseEvents": true,
+  "smoothFactor": 1.0,
+  "noClip": false,
+  "paused": false,
+  "reverse": false,
+  "hardwareAcceleration": false,
+  "delay": 400,
+  "pulseColor": "#facc15",
+}
+        ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            var circle_marker_b84babe72dea47a8abf735a1b33bc36e = L.circleMarker(
+                [29.4843, -81.2042],
+                {"bubblingMouseEvents": true, "color": "#111827", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+        var popup_c5af2d4c49aad89326e79279e2c12228 = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_1fe4578c514adb3d7cad093fc5b6a374 = $(`<div id="html_1fe4578c514adb3d7cad093fc5b6a374" style="width: 100.0%; height: 100.0%;"><b>TTL 1 | 172.2.0.1 | 1.5 ms</b><br>Palm Coast<br>Florida<br>United States<br>AT&T Enterprises, LLC</div>`)[0];
+                popup_c5af2d4c49aad89326e79279e2c12228.setContent(html_1fe4578c514adb3d7cad093fc5b6a374);
+            
+        
+
+        circle_marker_b84babe72dea47a8abf735a1b33bc36e.bindPopup(popup_c5af2d4c49aad89326e79279e2c12228)
+        ;
+
+        
+    
+    
+            circle_marker_b84babe72dea47a8abf735a1b33bc36e.bindTooltip(
+                `<div>
+                     TTL 1 - 172.2.0.1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c72daa2f4aa7833800ababe3b39c211c = L.marker(
+                [29.4843, -81.2042],
+                {
+}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            var div_icon_022b2ba127a06ab754ccbab2215d5dae = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"width: 28px; height: 28px; border-radius: 999px; background: #0f172a; border: 2px solid #22c55e; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.28);\"\u003e1\u003c/div\u003e\n                    ",
+  "iconSize": [28, 28],
+  "iconAnchor": [14, 14],
+  "className": "empty",
+});
+        
+    
+                marker_c72daa2f4aa7833800ababe3b39c211c.setIcon(div_icon_022b2ba127a06ab754ccbab2215d5dae);
+            
+    
+            var circle_marker_e76956d91677951bbbcd3e7a208541e6 = L.circleMarker(
+                [-34.6132, -58.3772],
+                {"bubblingMouseEvents": true, "color": "#111827", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+        var popup_fd33d58bb06810bb64072ec68683048e = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_970a8e1174785ce9579c58b55b0576a5 = $(`<div id="html_970a8e1174785ce9579c58b55b0576a5" style="width: 100.0%; height: 100.0%;"><b>TTL 2 | 190.111.232.253 | 4.4 ms</b><br>Buenos Aires<br>Buenos Aires F.D.<br>Argentina<br>CPS</div>`)[0];
+                popup_fd33d58bb06810bb64072ec68683048e.setContent(html_970a8e1174785ce9579c58b55b0576a5);
+            
+        
+
+        circle_marker_e76956d91677951bbbcd3e7a208541e6.bindPopup(popup_fd33d58bb06810bb64072ec68683048e)
+        ;
+
+        
+    
+    
+            circle_marker_e76956d91677951bbbcd3e7a208541e6.bindTooltip(
+                `<div>
+                     TTL 2 - 190.111.232.253
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_195eddbf6c103b68d3b236b940c72f3f = L.marker(
+                [-34.6132, -58.3772],
+                {
+}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            var div_icon_1b5a79a67aa1ef5007243aa2a7782ae5 = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"width: 28px; height: 28px; border-radius: 999px; background: #0f172a; border: 2px solid #22c55e; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.28);\"\u003e2\u003c/div\u003e\n                    ",
+  "iconSize": [28, 28],
+  "iconAnchor": [14, 14],
+  "className": "empty",
+});
+        
+    
+                marker_195eddbf6c103b68d3b236b940c72f3f.setIcon(div_icon_1b5a79a67aa1ef5007243aa2a7782ae5);
+            
+    
+            var circle_marker_5eca3fd200df715942e618bf3bdb0692 = L.circleMarker(
+                [-34.6602, -58.3674],
+                {"bubblingMouseEvents": true, "color": "#111827", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+        var popup_2b6314ca07ebd2b14cf27146272958bc = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_944198b8e833be5b636d1b34349d27ca = $(`<div id="html_944198b8e833be5b636d1b34349d27ca" style="width: 100.0%; height: 100.0%;"><b>TTL 3 | 190.111.201.162 | 5.4 ms</b><br>Avellaneda<br>Buenos Aires<br>Argentina<br>CPS</div>`)[0];
+                popup_2b6314ca07ebd2b14cf27146272958bc.setContent(html_944198b8e833be5b636d1b34349d27ca);
+            
+        
+
+        circle_marker_5eca3fd200df715942e618bf3bdb0692.bindPopup(popup_2b6314ca07ebd2b14cf27146272958bc)
+        ;
+
+        
+    
+    
+            circle_marker_5eca3fd200df715942e618bf3bdb0692.bindTooltip(
+                `<div>
+                     TTL 3 - 190.111.201.162
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_91d3be4d9c7195a240b7d1ae86572daf = L.marker(
+                [-34.6602, -58.3674],
+                {
+}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            var div_icon_2f25f3d0e46408ab5391adedc5506b4c = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"width: 28px; height: 28px; border-radius: 999px; background: #0f172a; border: 2px solid #22c55e; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.28);\"\u003e3\u003c/div\u003e\n                    ",
+  "iconSize": [28, 28],
+  "iconAnchor": [14, 14],
+  "className": "empty",
+});
+        
+    
+                marker_91d3be4d9c7195a240b7d1ae86572daf.setIcon(div_icon_2f25f3d0e46408ab5391adedc5506b4c);
+            
+    
+            var circle_marker_2f9fb68a012739cc65907e6320e67671 = L.circleMarker(
+                [37.4225, -122.085],
+                {"bubblingMouseEvents": true, "color": "#111827", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f59e0b", "fillOpacity": 0.95, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+        var popup_a054570de56ecf454fae9cb58954026e = L.popup({
+  "maxWidth": 320,
+});
+
+        
+            
+                var html_eace22c5920c9aed3afd22a28baed98e = $(`<div id="html_eace22c5920c9aed3afd22a28baed98e" style="width: 100.0%; height: 100.0%;"><b>TTL 5 | 142.251.156.119 | 3.4 ms</b><br>Mountain View<br>California<br>United States<br>Google LLC</div>`)[0];
+                popup_a054570de56ecf454fae9cb58954026e.setContent(html_eace22c5920c9aed3afd22a28baed98e);
+            
+        
+
+        circle_marker_2f9fb68a012739cc65907e6320e67671.bindPopup(popup_a054570de56ecf454fae9cb58954026e)
+        ;
+
+        
+    
+    
+            circle_marker_2f9fb68a012739cc65907e6320e67671.bindTooltip(
+                `<div>
+                     TTL 5 - 142.251.156.119
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_4d7b91a5ac786496f5c8886b293cc200 = L.marker(
+                [37.4225, -122.085],
+                {
+}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            var div_icon_839ce7b547fbb00c4cc761d8e66aec2a = L.divIcon({
+  "html": "\n                    \u003cdiv style=\"width: 28px; height: 28px; border-radius: 999px; background: #0f172a; border: 2px solid #22c55e; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.28);\"\u003e4\u003c/div\u003e\n                    ",
+  "iconSize": [28, 28],
+  "iconAnchor": [14, 14],
+  "className": "empty",
+});
+        
+    
+                marker_4d7b91a5ac786496f5c8886b293cc200.setIcon(div_icon_839ce7b547fbb00c4cc761d8e66aec2a);
+            
+    
+            var marker_c33d4089282d6e9352e0b7fe106af9c2 = L.marker(
+                [37.4225, -122.085],
+                {
+}
+            ).addTo(map_9a34ef332e78e100cf48bcd6caac2521);
+        
+    
+            var icon_59b56715d3a005913e4744852bcfd1b4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "flag",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0a8b297c56dd5835f15ed5c6a9f39ead = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_24a616117b83a6d19c8277da832aa6ba = $(`<div id="html_24a616117b83a6d19c8277da832aa6ba" style="width: 100.0%; height: 100.0%;">Destino aproximado: 142.251.156.119</div>`)[0];
+                popup_0a8b297c56dd5835f15ed5c6a9f39ead.setContent(html_24a616117b83a6d19c8277da832aa6ba);
+            
+        
+
+        marker_c33d4089282d6e9352e0b7fe106af9c2.bindPopup(popup_0a8b297c56dd5835f15ed5c6a9f39ead)
+        ;
+
+        
+    
+    
+                marker_c33d4089282d6e9352e0b7fe106af9c2.setIcon(icon_59b56715d3a005913e4744852bcfd1b4);
+            
+</script>
+</html>
